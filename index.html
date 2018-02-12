@@ -16,18 +16,30 @@
       var index = streams.home.length - 1;
       while (index >= 0) {
         var tweet = streams.home[index];
+
         var $tweet = $('<div></div>');
-        $tweet.text('@' + tweet.user + ': ' + tweet.message);
-        $tweet.appendTo($body);
+        var $user = $('<p class=user></p>');
+        var $message = $('<p class=message></p>');
+        var $dateTime = $('<p class=dateTime></p>');
+
+        $user.css({ 'display': 'inline', 'font-weight': 'bold' });
+        $message.css({ 'display': 'inline' });
+        $dateTime.css({ 'display': 'inline' });
+
+        $tweet.text('@').appendTo($body);
+        $user.text(tweet.user + ' ').appendTo($tweet);
+        $message.text(tweet.message).appendTo($tweet);
+        $dateTime.text(" [" + tweet.created_at + "]").appendTo($tweet);
         index -= 1;
       }
+
       var $button = $("<input type='button' value='New Tweet'>");
-      $button.appendTo($body);
+      $button.css({ 'background-color': 'black', 'color': 'white' }).appendTo($body);
       $button.on('click', function () {
         generateRandomTweet();
         var newTweet = streams.home.pop();
         var $newTweet = $('<div></div>');
-        $newTweet.text('@' + newTweet.user + ': ' + newTweet.message);
+        $newTweet.text('@' + newTweet.user + ': ' + newTweet.message + ' [' + new Date() + ']');
         $(this).before($newTweet);
       });
     });
