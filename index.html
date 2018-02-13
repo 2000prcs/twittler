@@ -2,50 +2,81 @@
 <html>
 
 <head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
   <script src="jquery.js"></script>
   <script src="data_generator.js"></script>
 </head>
 
 <body>
+  <div class='tweets'></div>
   <script>
-
     $(document).ready(function () {
-      var $body = $('body');
+      var $body = $('.tweets');
       $body.html('');
 
       var index = streams.home.length - 1;
       while (index >= 0) {
         var tweet = streams.home[index];
 
-        var $tweet = $('<div></div>');
+        var $tweet = $('<div class=tweet></div>');
         var $user = $('<p class=user></p>');
         var $message = $('<p class=message></p>');
         var $dateTime = $('<p class=dateTime></p>');
 
-        $user.css({ 'display': 'inline', 'font-weight': 'bold' });
-        $message.css({ 'display': 'inline' });
-        $dateTime.css({ 'display': 'inline' });
-
-        $tweet.text('@').appendTo($body);
-        $user.text(tweet.user + ' ').appendTo($tweet);
+        $tweet.appendTo($body);
+        $user.addClass(tweet.user).attr('data-user', tweet.user).text('@' + tweet.user + ' ').appendTo($tweet);
         $message.text(tweet.message).appendTo($tweet);
-        $dateTime.text(" [" + tweet.created_at + "]").appendTo($tweet);
+        $dateTime.text(" [" + tweet.created_at.toUTCString() + "]").appendTo($tweet);
+
         index -= 1;
       }
 
-      var $button = $("<input type='button' value='New Tweet'>");
-      $button.css({ 'background-color': 'black', 'color': 'white' }).appendTo($body);
+      var $button = $("<input class='btn new' type=button value='New Tweet'>");
+      $button.appendTo($body);
       $button.on('click', function () {
         generateRandomTweet();
+
         var newTweet = streams.home.pop();
-        var $newTweet = $('<div></div>');
-        $newTweet.text('@' + newTweet.user + ': ' + newTweet.message + ' [' + new Date() + ']');
+
+        var $newTweet = $('<div class=tweet></div>');
+        var $newUser = $('<p class=user></p>');
+        var $newMessage = $('<p class=message></p>');
+        var $newDateTime = $('<p class=dateTime></p>');
+
+        $newTweet.appendTo($body);
+        $newUser.addClass(newTweet.user).attr('data-user', newTweet.user).text('@' + newTweet.user + ' ').appendTo($newTweet);
+        $newMessage.text(newTweet.message).appendTo($newTweet);
+        $newDateTime.text(" [" + new Date().toUTCString() + "]").appendTo($newTweet);
+
         $(this).before($newTweet);
       });
+
+      $('.tweets').on('mouseover', '.tweet .user', function () {
+        $(this).addClass('highlight');
+      });
+
+      $('.tweets').on('mouseleave', '.tweet .user', function () {
+        $(this).removeClass('highlight');
+      });
+
+
+      $('.tweets').on('click', '.tweet .user', function (event) {
+        event.preventDefault();
+
+        var user = $(this).data('user');
+
+        $('.timeline').remove();
+        var $timeline = $('<h1 class=timeline>' + user + '\'s Timeline</h1>');
+        $timeline.prependTo($body);
+
+        $('.tweet').not("div:contains('" + user + "')").hide(300);
+        $("div:contains('" + user + "')").show(300);
+      });
+
     });
 
   </script>
-
 </body>
 
 </html>

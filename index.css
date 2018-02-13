@@ -1,0 +1,35 @@
+.user {
+    display: inline;
+    font-weight: bold;
+}
+
+.message {
+    display: inline;
+    font-family: 'Roboto', sans-serif;
+}
+
+.dateTime {
+    display: inline;
+    color: gray;
+}
+
+.highlight {
+    text-decoration: underline;
+    color: pink;
+    cursor: pointer;
+}
+
+.btn {
+    margin-top: 20px;
+    background-color: black;
+    color: white;
+}
+
+.btn .home {
+    margin-left: 10px;
+}
+
+.timeline {
+    font-family: 'Roboto', sans-serif;
+    text-decoration: underline;
+}
